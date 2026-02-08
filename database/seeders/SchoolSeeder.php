@@ -93,16 +93,22 @@ class SchoolSeeder extends Seeder
         foreach ($schools as $data) {
 
             // Pick a random valid location
-            $county = County::inRandomOrder()->first();
-            $subcounty = Subcounty::where('county_id', $county->id)->inRandomOrder()->first();
-            $ward = Ward::where('subcounty_id', $subcounty->id)->inRandomOrder()->first();
+            $subcounty = Subcounty::inRandomOrder()->first();
+
+            $countyId = $subcounty->county->id;
+
+            $ward = Ward::where('subcounty_id', $subcounty->id)
+                        ->inRandomOrder()
+                        ->first();
+
+            if(!$ward) continue;
 
             School::updateOrCreate(
                 ['name' => $data['name']],
                 array_merge($data, [
                     'slug' => Str::slug($data['name']),
                     'subdomain' => Str::slug($data['name']),
-                    'county_id' => $county->id,
+                    'county_id' => $countyId,
                     'subcounty_id' => $subcounty->id,
                     'ward_id' => $ward->id,
                     'address' => $ward->name.', '.$subcounty->name,
