@@ -23,11 +23,12 @@ return new class extends Migration
             $table->foreignId('county_id')->constrained()->cascadeOnDelete()->index();
             $table->foreignId('subcounty_id')->constrained()->cascadeOnDelete()->index();
             $table->foreignId('ward_id')->constrained()->cascadeOnDelete()->index();
+            $table->decimal('latitude', 10, 7)->nullable()->comment('School GPS latitude');
+            $table->decimal('longitude', 10, 7)->nullable()->comment('School GPS longitude');
+
 
             // Contact info
-            $table->string('postal_address')->nullable();
-            $table->string('postal_code')->nullable();
-            $table->string('town_city')->nullable();
+            $table->string('address')->nullable()->comment('Full postal address including town/city and postal code');
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('website')->nullable();

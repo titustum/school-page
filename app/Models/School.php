@@ -18,9 +18,9 @@ class School extends Model
         'county_id',
         'subcounty_id',
         'ward_id',
-        'postal_address',
-        'postal_code',
-        'town_city',
+        'latitude',
+        'longitude',
+        'address',
         'phone',
         'email',
         'website',
@@ -85,8 +85,7 @@ class School extends Model
      */
     public function fullAddress()
     {
-        $parts = array_filter([$this->postal_address, $this->town_city, $this->postal_code]);
-        return implode(', ', $parts);
+        return $this->address;
     }
 
     /**
