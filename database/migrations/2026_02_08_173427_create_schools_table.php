@@ -26,7 +26,6 @@ return new class extends Migration
             $table->decimal('latitude', 10, 7)->nullable()->comment('School GPS latitude');
             $table->decimal('longitude', 10, 7)->nullable()->comment('School GPS longitude');
 
-
             // Contact info
             $table->string('address')->nullable()->comment('Full postal address including town/city and postal code');
             $table->string('phone')->nullable();

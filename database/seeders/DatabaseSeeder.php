@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         User::updateOrInsert([
             'name' => 'Admin User',
             'email' => 'admin@email.com',
-            'password'=> 'password'
+            'password' => 'password',
         ]);
 
         // call other seeders after

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\County;
+use Illuminate\Database\Seeder;
 
 class CountySeeder extends Seeder
 {
@@ -59,7 +59,7 @@ class CountySeeder extends Seeder
             'Migori',
             'Kisii',
             'Nyamira',
-            'Nairobi'
+            'Nairobi',
         ];
 
         foreach ($counties as $county) {

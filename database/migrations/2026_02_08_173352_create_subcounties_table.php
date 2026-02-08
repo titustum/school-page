@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('county_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->timestamps();
-            $table->unique(['county_id','name']);
+            $table->unique(['county_id', 'name']);
         });
     }
 

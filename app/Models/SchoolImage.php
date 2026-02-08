@@ -9,7 +9,7 @@ class SchoolImage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['school_id','url','caption'];
+    protected $fillable = ['school_id', 'url', 'caption'];
 
     public function school()
     {

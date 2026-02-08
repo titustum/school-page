@@ -9,7 +9,7 @@ class Ward extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['county_id', 'subcounty_id','name'];
+    protected $fillable = ['county_id', 'subcounty_id', 'name'];
 
     public function subcounty()
     {

@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\School;
 use App\Models\County;
+use App\Models\School;
 use App\Models\Subcounty;
 use App\Models\Ward;
+use Illuminate\Database\Seeder;
 
 class SchoolSeeder extends Seeder
 {

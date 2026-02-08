@@ -9,7 +9,7 @@ class SchoolDocument extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['school_id','type','file_url','file_name'];
+    protected $fillable = ['school_id', 'type', 'file_url', 'file_name'];
 
     public function school()
     {
