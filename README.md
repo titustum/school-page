@@ -1,59 +1,176 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SchoolPage.co.ke – Single-Page School Portfolios
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Bringing Every School Online in Kenya**
 
-## About Laravel
+SchoolPage.co.ke is a Laravel-based platform that allows every school in Kenya to have a **single-page portfolio**, showcasing essential information, images, and documents such as fee structures. Each school gets a **unique subdomain**, making it simple to share and access online.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🌟 Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* **Single-page school portfolios** (scrollable, mobile-friendly)
+* **Subdomain routing** for each school: `[school-subdomain].schoolpage.co.ke`
+* **Dynamic sections per school:**
 
-## Learning Laravel
+  * Header with school name, category, type, gender, principal name (optional)
+  * About / description
+  * Contact information (phone, email, postal address, town/city)
+  * Fee structure (PDF download)
+  * Gallery / images
+* **Admin panel** for creating and updating schools, images, and documents
+* **Location hierarchy:** county → subcounty → ward
+* **Future-proof design** for thousands of schools
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🎯 Tech Stack
 
-## Laravel Sponsors
+* **Backend:** Laravel 10
+* **Frontend:** Blade templates + TailwindCSS / Bootstrap (optional)
+* **Database:** MySQL / MariaDB
+* **Storage:** Local Laravel storage for images and PDFs (cloud storage optional)
+* **Subdomain routing:** Built-in Laravel route groups
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🗂 Database Structure
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+**Tables:**
 
-## Contributing
+* `counties` – list of Kenyan counties
+* `subcounties` – linked to counties
+* `wards` – linked to subcounties
+* `schools` – main school portfolio info
+* `school_images` – multiple images per school
+* `school_documents` – PDFs (fee structures, admission forms, etc.)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Relationships:**
 
-## Code of Conduct
+* `School` hasMany `SchoolImage` and `SchoolDocument`
+* `School` belongsTo `County`, `Subcounty`, `Ward`
+* `Subcounty` belongsTo `County`
+* `Ward` belongsTo `Subcounty`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🚀 Installation
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Clone the repository:
 
-## License
+```bash
+git clone https://github.com/yourusername/schoolpage.co.ke.git
+cd schoolpage.co.ke
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+2. Install dependencies:
+
+```bash
+composer install
+npm install
+npm run dev
+```
+
+3. Configure environment:
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Set your database credentials in `.env`.
+
+4. Run migrations:
+
+```bash
+php artisan migrate
+```
+
+5. Optional: Seed counties, subcounties, wards for Kenya.
+
+6. Serve the application:
+
+```bash
+php artisan serve
+```
+
+---
+
+## 🌐 Subdomain Routing
+
+Each school portfolio is accessed via a subdomain:
+
+```
+[school-subdomain].schoolpage.co.ke
+```
+
+Example:
+
+```
+st-mary.schoolpage.co.ke
+```
+
+Routing example in Laravel:
+
+```php
+Route::domain('{school}.schoolpage.co.ke')->group(function () {
+    Route::get('/', [SchoolPortfolioController::class, 'show']);
+});
+```
+
+---
+
+## 🛠 Admin Panel
+
+* Create, update, and delete school portfolios
+* Upload multiple images per school
+* Upload fee structure PDFs and other documents
+* Filter by county, subcounty, or ward
+
+---
+
+## 🎨 Design Guidelines
+
+* **Colors:** Black + Dark Green
+* **Favicon:** Graduation cap icon
+* **Frontend:** Minimalist, mobile-first, accessible
+
+---
+
+## ⚡ Usage
+
+* Schools can be onboarded by admin initially
+* Each school portfolio displays:
+
+  * School info, images, PDF downloads
+  * Clear footer branding:
+
+    ```
+    Powered by SchoolPage.co.ke – Bringing Every School Online
+    ```
+
+---
+
+## 📦 Future Enhancements
+
+* Self-service login for schools to update their own portfolios
+* Event announcements or school news feed
+* Analytics dashboard for schools
+* Integration with cloud storage for scalable images/PDFs
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/xyz`)
+3. Commit your changes (`git commit -m 'Add xyz feature'`)
+4. Push to branch (`git push origin feature/xyz`)
+5. Create a pull request
+
+---
+
+## 📜 License
+
+This project is **MIT Licensed** – feel free to use and modify for educational and commercial purposes.
+
+---
