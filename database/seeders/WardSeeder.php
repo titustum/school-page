@@ -163,24 +163,27 @@ class WardSeeder extends Seeder
             // Add more subcounties and wards as needed...
         ];
 
+        $allWards = [];
         foreach ($wards as $subcountyName => $wardList) {
             $subcounty = Subcounty::where('name', $subcountyName)->first();
-
             if (! $subcounty) {
                 $this->command->warn("Subcounty not found: $subcountyName");
-
                 continue;
             }
-
             $countyId = $subcounty->county_id;
 
             foreach ($wardList as $wardName) {
-                Ward::create([
+                $allWards[] = [
                     'county_id' => $countyId,
                     'subcounty_id' => $subcounty->id,
                     'name' => $wardName,
-                ]);
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
             }
         }
+
+        Ward::insert($allWards);
+
     }
 }
