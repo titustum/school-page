@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('wards', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('county_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('subcounty_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
             $table->timestamps();
+            $table->unique(['subcounty_id','name']);
         });
     }
 

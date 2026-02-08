@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('counties', function (Blueprint $table) {
+        Schema::create('school_documents', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->foreignId('school_id')->constrained()->cascadeOnDelete();
+            $table->string('type'); // fee_structure, admission_form etc.
+            $table->string('file_url');
+            $table->string('file_name')->nullable();
             $table->timestamps();
         });
     }
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('counties');
+        Schema::dropIfExists('school_documents');
     }
 };

@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('subcounties', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('county_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
             $table->timestamps();
+            $table->unique(['county_id','name']);
         });
     }
 

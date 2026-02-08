@@ -13,7 +13,41 @@ return new class extends Migration
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
+
+            // Basic info
+            $table->string('name');
+            $table->string('slug')->unique()->comment('SEO-friendly URL slug');
+            $table->string('subdomain')->unique()->comment('subdomain.schoolpage.co.ke');
+
+            // Location
+            $table->foreignId('county_id')->constrained()->cascadeOnDelete()->index();
+            $table->foreignId('subcounty_id')->constrained()->cascadeOnDelete()->index();
+            $table->foreignId('ward_id')->constrained()->cascadeOnDelete()->index();
+
+            // Contact info
+            $table->string('postal_address')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('town_city')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('website')->nullable();
+            $table->string('principal_name')->nullable();
+
+            // Attributes
+            $table->enum('category', ['senior secondary', 'comprehensive'])->default('comprehensive');
+            $table->enum('type', ['public', 'private'])->default('public');
+            $table->enum('gender', ['male', 'female', 'mixed'])->default('mixed');
+
+            // Optional description
+            $table->text('description')->nullable();
+
+            // Timestamps and soft deletes
             $table->timestamps();
+            $table->softDeletes();
+
+            // Indexes for search optimization
+            $table->index(['county_id', 'subcounty_id', 'ward_id']);
+            $table->index(['name', 'slug', 'subdomain']);
         });
     }
 
