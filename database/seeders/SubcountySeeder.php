@@ -43,7 +43,7 @@ class SubcountySeeder extends Seeder
             'Garissa' => ['Balambala', 'Daadab', 'Fafi', 'Garissa Township', 'Lagdera', 'Ijara'],
 
             // Wajir County
-            'Wajir' => ['Wajir North', 'Wajir East', 'Wajir West', 'Wajir South', 'Tarbaj', 'Eldas', 'Wajir East'],
+            'Wajir' => ['Wajir North', 'Wajir East', 'Wajir West', 'Wajir South', 'Tarbaj', 'Eldas'],
 
             // Mandera County
             'Mandera' => ['Mandera East', 'Mandera West', 'Mandera North', 'Mandera South', 'Banissa', 'Lafey', 'Elwak'],
@@ -82,7 +82,7 @@ class SubcountySeeder extends Seeder
             'Kirinyaga' => ['Kirinyaga Central', 'Kirinyaga East', 'Kirinyaga West', 'Mwea', 'Gichugu'],
 
             // Murang'a County
-            'Murang\'a' => ['Kandara', 'Kigumo', 'Kiharu', 'Mathioya', 'Kiru', 'Kigumo', 'Kandara'],
+            'Murang\'a' => ['Kandara', 'Kigumo', 'Kiharu', 'Mathioya', 'Kiru'],
 
             // Kiambu County
             'Kiambu' => ['Kiambu', 'Githunguri', 'Juja', 'Ruiru', 'Thika Town', 'Kiambaa', 'Kabete', 'Limuru', 'Lari'],

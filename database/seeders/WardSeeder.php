@@ -168,6 +168,7 @@ class WardSeeder extends Seeder
             $subcounty = Subcounty::where('name', $subcountyName)->first();
             if (! $subcounty) {
                 $this->command->warn("Subcounty not found: $subcountyName");
+
                 continue;
             }
             $countyId = $subcounty->county_id;
