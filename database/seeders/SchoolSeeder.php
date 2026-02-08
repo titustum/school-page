@@ -16,76 +16,98 @@ class SchoolSeeder extends Seeder
      */
     public function run(): void
     {
-        // Example schools array
         $schools = [
             [
-                'name' => 'Nairobi West High School',
-                'subdomain' => 'nairowest',
-                'county' => 'Nairobi',
-                'subcounty' => 'Westlands',
-                'ward' => 'Kangemi',
+                'name' => 'Lenana School',
                 'category' => 'senior secondary',
-                'type' => 'private',
-                'gender' => 'mixed',
-                'phone' => '0712345678',
-                'email' => 'info@westnairobihs.co.ke',
-                'address' => 'P.O Box 123, Nairobi',
-                'latitude' => -1.265,
-                'longitude' => 36.812,
-                'description' => 'A top private school in West Nairobi.',
+                'type' => 'public',
+                'gender' => 'male',
+                'motto' => 'Strive to Excel',
+                'mission' => 'To nurture disciplined and academically excellent students.',
+                'vision' => 'A centre of academic excellence and leadership.',
+                'curriculum' => '8-4-4',
+                'email' => 'info@lenanaschool.ac.ke',
+                'phone' => '+254 700 111 222',
             ],
             [
-                'name' => 'Mombasa Comprehensive School',
-                'subdomain' => 'mombasa-comprehensive',
-                'county' => 'Mombasa',
-                'subcounty' => 'Mvita',
-                'ward' => 'Majengo',
+                'name' => 'Alliance High School',
+                'category' => 'senior secondary',
+                'type' => 'public',
+                'gender' => 'male',
+                'motto' => 'Strong to Serve',
+                'curriculum' => '8-4-4',
+            ],
+            [
+                'name' => 'Kenya High School',
+                'category' => 'senior secondary',
+                'type' => 'public',
+                'gender' => 'female',
+                'motto' => 'Lux in Tenebris',
+            ],
+            [
+                'name' => 'Moi Girls Eldoret',
+                'category' => 'senior secondary',
+                'type' => 'public',
+                'gender' => 'female',
+            ],
+            [
+                'name' => 'Starehe Boys Centre',
+                'category' => 'senior secondary',
+                'type' => 'public',
+                'gender' => 'male',
+            ],
+            [
+                'name' => 'Brookhouse School',
                 'category' => 'comprehensive',
+                'type' => 'private',
+                'gender' => 'mixed',
+                'curriculum' => 'IGCSE',
+            ],
+            [
+                'name' => 'Riara Springs Academy',
+                'category' => 'comprehensive',
+                'type' => 'private',
+                'gender' => 'mixed',
+                'curriculum' => 'CBC',
+            ],
+            [
+                'name' => 'Kisumu Boys High School',
+                'category' => 'senior secondary',
+                'type' => 'public',
+                'gender' => 'male',
+            ],
+            [
+                'name' => 'Nakuru Girls High School',
+                'category' => 'senior secondary',
+                'type' => 'public',
+                'gender' => 'female',
+            ],
+            [
+                'name' => 'Chebara High School',
+                'category' => 'senior secondary',
                 'type' => 'public',
                 'gender' => 'mixed',
-                'phone' => '0723456789',
-                'email' => 'contact@mombasatech.co.ke',
-                'address' => 'P.O Box 456, Mombasa',
-                'latitude' => -4.0435,
-                'longitude' => 39.6682,
-                'description' => 'Public comprehensive school serving Mombasa region.',
             ],
-            // Add more schools here...
         ];
 
         foreach ($schools as $data) {
-            $county = County::where('name', $data['county'])->first();
-            $subcounty = Subcounty::where('name', $data['subcounty'])
-                ->where('county_id', $county->id)
-                ->first();
-            $ward = Ward::where('name', $data['ward'])
-                ->where('subcounty_id', $subcounty->id)
-                ->first();
 
-            if (! $county || ! $subcounty || ! $ward) {
-                $this->command->warn("Location not found for school: {$data['name']}");
-
-                continue;
-            }
+            // Pick a random valid location
+            $county = County::inRandomOrder()->first();
+            $subcounty = Subcounty::where('county_id', $county->id)->inRandomOrder()->first();
+            $ward = Ward::where('subcounty_id', $subcounty->id)->inRandomOrder()->first();
 
             School::updateOrCreate(
-                ['subdomain' => $data['subdomain']],
-                [
-                    'name' => $data['name'],
+                ['name' => $data['name']],
+                array_merge($data, [
                     'slug' => Str::slug($data['name']),
+                    'subdomain' => Str::slug($data['name']),
                     'county_id' => $county->id,
                     'subcounty_id' => $subcounty->id,
                     'ward_id' => $ward->id,
-                    'category' => $data['category'],
-                    'type' => $data['type'],
-                    'gender' => $data['gender'],
-                    'phone' => $data['phone'],
-                    'email' => $data['email'],
-                    'address' => $data['address'],
-                    'latitude' => $data['latitude'],
-                    'longitude' => $data['longitude'],
-                    'description' => $data['description'] ?? null,
-                ]
+                    'address' => $ward->name.', '.$subcounty->name,
+                    'description' => 'An established institution offering quality education and holistic student development.',
+                ])
             );
         }
     }

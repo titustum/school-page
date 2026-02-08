@@ -14,41 +14,48 @@ return new class extends Migration
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
 
-            // Basic info
+            // Identity
             $table->string('name');
             $table->string('slug')->unique()->comment('SEO-friendly URL slug');
-            $table->string('subdomain')->unique()->comment('subdomain.schoolpage.co.ke');
+            $table->string('subdomain')->unique()->comment('lowercase subdomain.schoolpage.co.ke');
 
             // Location
             $table->foreignId('county_id')->constrained()->cascadeOnDelete()->index();
             $table->foreignId('subcounty_id')->constrained()->cascadeOnDelete()->index();
             $table->foreignId('ward_id')->constrained()->cascadeOnDelete()->index();
-            $table->decimal('latitude', 10, 7)->nullable()->comment('School GPS latitude');
-            $table->decimal('longitude', 10, 7)->nullable()->comment('School GPS longitude');
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
 
-            // Contact info
-            $table->string('address')->nullable()->comment('Full postal address including town/city and postal code');
-            $table->string('phone')->nullable();
-            $table->string('email')->nullable();
+            // Contact
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable()->index();
+            $table->string('email')->nullable()->index();
             $table->string('website')->nullable();
             $table->string('principal_name')->nullable();
 
-            // Attributes
-            $table->enum('category', ['senior secondary', 'comprehensive'])->default('comprehensive');
-            $table->enum('type', ['public', 'private'])->default('public');
-            $table->enum('gender', ['male', 'female', 'mixed'])->default('mixed');
+            // Classification (flexible)
+            $table->string('category')->default('comprehensive');
+            $table->string('type')->default('public');
+            $table->string('gender')->default('mixed');
 
-            // Optional description
+            // Branding & content
+            $table->string('logo_path')->nullable();
+            $table->string('motto')->nullable();
+            $table->text('mission')->nullable();
+            $table->text('vision')->nullable();
+            $table->string('curriculum')->nullable();
             $table->text('description')->nullable();
 
-            // Timestamps and soft deletes
+            // Meta
             $table->timestamps();
             $table->softDeletes();
 
-            // Indexes for search optimization
+            // Search / performance
             $table->index(['county_id', 'subcounty_id', 'ward_id']);
             $table->index(['name', 'slug', 'subdomain']);
+            $table->index(['latitude', 'longitude']);
         });
+
     }
 
     /**

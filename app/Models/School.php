@@ -11,29 +11,65 @@ class School extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * Mass assignable attributes
+     */
     protected $fillable = [
         'name',
         'slug',
         'subdomain',
+
         'county_id',
         'subcounty_id',
         'ward_id',
         'latitude',
         'longitude',
+
         'address',
         'phone',
         'email',
         'website',
         'principal_name',
+
         'category',
         'type',
         'gender',
+
+        'logo_path',
+        'motto',
+        'mission',
+        'vision',
+        'curriculum',
         'description',
     ];
 
-    // ------------------------
-    // Relationships
-    // ------------------------
+    /**
+     * Attribute casting
+     */
+    protected $casts = [
+        'latitude' => 'decimal:7',
+        'longitude' => 'decimal:7',
+    ];
+
+    /**
+     * Automatically generate slug & subdomain if missing
+     */
+    protected static function booted()
+    {
+        static::creating(function ($school) {
+            if (empty($school->slug)) {
+                $school->slug = Str::slug($school->name);
+            }
+
+            if (empty($school->subdomain)) {
+                $school->subdomain = Str::slug($school->name);
+            }
+        });
+    }
+
+    /* =========================
+     |  Relationships
+     |=========================*/
 
     public function county()
     {
@@ -60,48 +96,43 @@ class School extends Model
         return $this->hasMany(SchoolDocument::class);
     }
 
-    // ------------------------
-    // Accessors & Helpers
-    // ------------------------
+    /* =========================
+     |  Accessors
+     |=========================*/
 
-    /**
-     * Get the school's main image URL or a placeholder.
-     */
-    public function mainImage()
+    public function getLogoUrlAttribute(): ?string
     {
-        return $this->images()->first()->url ?? asset('images/school-placeholder.png');
+        return $this->logo_path
+            ? asset('storage/'.$this->logo_path)
+            : null;
     }
 
-    /**
-     * Get the school's fee structure PDF URL (if uploaded).
-     */
-    public function feeStructure()
+    public function getFullAddressAttribute(): string
     {
-        return $this->documents()->where('type', 'fee_structure')->first()?->file_url;
+        return collect([
+            $this->address,
+            optional($this->ward)->name,
+            optional($this->subcounty)->name,
+            optional($this->county)->name.' County',
+        ])->filter()->implode(', ');
     }
 
-    /**
-     * Get the school's full address.
-     */
-    public function fullAddress()
+    /* =========================
+     |  Helpers / Scopes
+     |=========================*/
+
+    public function scopePublic($query)
     {
-        return $this->address;
+        return $query->where('type', 'public');
     }
 
-    /**
-     * Automatically generate a slug when creating a school.
-     */
-    protected static function booted()
+    public function scopePrivate($query)
     {
-        static::creating(function ($school) {
-            if (empty($school->slug)) {
-                $school->slug = Str::slug($school->name);
-            }
+        return $query->where('type', 'private');
+    }
 
-            // Optional: auto-generate subdomain from name
-            if (empty($school->subdomain)) {
-                $school->subdomain = Str::slug($school->name);
-            }
-        });
+    public function scopeInCounty($query, int $countyId)
+    {
+        return $query->where('county_id', $countyId);
     }
 }
